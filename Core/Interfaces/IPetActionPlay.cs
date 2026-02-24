@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TamagotchiVirtualSystem.Model
+namespace TamagotchiVirtualSystem.Core.Interfaces
 {
-    public  class Player
+    public interface IPetActionPlay
     {
+        void Play();
     }
 }

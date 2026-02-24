@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TamagotchiVirtualSystem.Core.Interfaces
 {
-    internal class IPetActions
+    public interface IPetActionSleep
     {
+        void Sleep();
     }
 }

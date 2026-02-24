@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TamagotchiVirtualSystem.Core.Model
 {
-    internal class EPetTypes
+    public enum EPetTypes
     {
     }
 }
