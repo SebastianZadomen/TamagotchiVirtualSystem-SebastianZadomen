@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace TamagotchiVirtualSystem.Core.Model
 {
-    public enum EPetTypes
+    public enum EState
     {
-        Dog,
-        Cat,
-        Chick
+        Happy,
+        Sad,
+        Angry,
+        Tired,
+        Sick
     }
 }
