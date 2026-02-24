@@ -13,7 +13,9 @@ namespace TamagotchiVirtualSystem.Model
         public EState EmotionalState { get; set; }
 
         public EPetTypes Pet { get; set; }
-        
+
+        public StatsPet Stats { get; set; }
+
 
     }
 }
