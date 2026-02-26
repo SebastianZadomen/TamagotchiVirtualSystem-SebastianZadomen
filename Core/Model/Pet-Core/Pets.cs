@@ -7,7 +7,7 @@ using TamagotchiVirtualSystem.Core.Model;
 
 namespace TamagotchiVirtualSystem.Model
 {
-    public abstract class Pets
+    public abstract class Pets 
     {
         public string Name { get; set; }
         public EState EmotionalState { get; set; }
@@ -16,6 +16,13 @@ namespace TamagotchiVirtualSystem.Model
 
         public StatsPet Stats { get; set; }
 
-
+        public Pets(string name, EState emotionalState, EPetTypes pet, StatsPet stats)
+        {
+            Name = name;
+            EmotionalState = emotionalState;
+            Pet = pet;
+            Stats = stats;
+           
+        }
     }
 }
