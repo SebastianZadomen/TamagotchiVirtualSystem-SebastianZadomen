@@ -14,8 +14,8 @@ namespace TamagotchiVirtualSystem.Model
 
         public EPetTypes Pet { get; set; }
 
-        public StatsPet Stats { get; set; }
-
+        public StatsPet Stats { get; set; } = new StatsPet(100,100,100);
+        /*
         public Pets(string name, EState emotionalState, EPetTypes pet, StatsPet stats)
         {
             Name = name;
@@ -23,6 +23,33 @@ namespace TamagotchiVirtualSystem.Model
             Pet = pet;
             Stats = stats;
            
+        }*/
+        public Pets(string name, EState emotionalState, EPetTypes pet)
+        {
+            Name = name;
+            EmotionalState = ComprobationEmotionalState();
+            Pet = pet;
+        }
+
+        public EState ComprobationEmotionalState()
+        {
+            if (Stats.HungryLevel <= 50)
+            {
+                EmotionalState = EState.Angry;
+            }
+            else if (Stats.EnergyLevel <= 30)
+            {
+                EmotionalState = EState.Tired;
+            }
+            else if (Stats.HealthLevel <= 20)
+            {
+                EmotionalState = EState.Sick;
+            }
+            else
+            {
+                EmotionalState = EState.Normal;
+            }
+            return EmotionalState;
         }
     }
 }

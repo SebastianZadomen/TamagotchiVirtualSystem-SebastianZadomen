@@ -8,25 +8,35 @@ using TamagotchiVirtualSystem.Model;
 
 namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
 {
+    
     public class Chick : Pets, IPetActionEat, IPetActionPlay, IPetActionSleep
     {
-        public Chick(string name, EState emotionalState, StatsPet stats, EPetTypes pet = EPetTypes.Chick) : base(name, emotionalState, pet, stats)
+        private const int EnergyMax = 100;
+
+        public Chick(string name, EState emotionalState = EState.Happy,  EPetTypes pet = EPetTypes.Chick) : base(name, emotionalState, pet)
         {
         }
-
+        
         public void Eat()
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"Haz alimentado a {Name}");
+            Stats.HungryLevel += 20;
         }
 
         public void Play()
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"{Name} esta jugando ");
+            Stats.EnergyLevel -= 20;
+            Stats.HungryLevel -= 30;
         }
 
         public void Sleep()
         {
-            throw new NotImplementedException();
+            if (Stats.EnergyLevel == EnergyMax)
+                Console.WriteLine($"La energia de {Name} esta al maximo, no puede dormir");
+            else
+                Console.WriteLine($"{Name} esta descansando");
+            Stats.EnergyLevel += 50;
         }
     }
 }

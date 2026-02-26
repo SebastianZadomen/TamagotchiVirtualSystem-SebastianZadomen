@@ -12,6 +12,7 @@ namespace TamagotchiVirtualSystem.Core.Model
         Sad,
         Angry,
         Tired,
-        Sick
+        Sick,
+        Normal
     }
 }
