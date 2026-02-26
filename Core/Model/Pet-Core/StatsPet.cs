@@ -14,10 +14,15 @@ namespace TamagotchiVirtualSystem.Core.Model
 
         public StatsPet(int hungryLevel, int energyLevel, int healthLevel) {
 
-            HungryLevel = hungryLevel;
-            EnergyLevel = energyLevel;
-            HealthLevel = healthLevel;
-        
+            HungryLevel = ClampLevel(hungryLevel + HungryLevel);
+            EnergyLevel = ClampLevel(energyLevel + EnergyLevel);
+            HealthLevel = ClampLevel(healthLevel + HealthLevel);
+
+        }
+
+        public int ClampLevel(int levelInput)
+        {
+            return Math.Clamp(levelInput, 0, 100);
         }
     }
 }
