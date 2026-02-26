@@ -23,6 +23,7 @@ namespace TamagotchiVirtualSystem.Core.Model
         public int ClampLevel(int levelInput)
         {
             return Math.Clamp(levelInput, 0, 100);
+
         }
     }
 }
