@@ -13,10 +13,10 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
     {
         private const int EnergyMax = 100;
 
-        public Chick(string name, EState emotionalState = EState.Happy,  EPetTypes pet = EPetTypes.Chick) : base(name, emotionalState, pet)
+        public Chick(string name) : base(name, EState.Normal, EPetTypes.Cat, new StatsPet(100, 100, 100))
         {
         }
-        
+
         public void Eat()
         {
             Console.WriteLine($"Haz alimentado a {Name}");

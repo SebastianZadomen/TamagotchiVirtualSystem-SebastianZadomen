@@ -12,7 +12,7 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
    {
         private const int EnergyMax = 100;
 
-        public Dog(string name, EState emotionalState = EState.Happy/*, StatsPet stats*/, EPetTypes pet = EPetTypes.Dog) : base(name, emotionalState, pet/*, stats*/)
+        public Dog(string name) : base(name, EState.Normal, EPetTypes.Cat, new StatsPet(100, 100, 100))
         {
         }
 

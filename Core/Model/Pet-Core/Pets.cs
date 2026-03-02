@@ -10,46 +10,42 @@ namespace TamagotchiVirtualSystem.Model
     public abstract class Pets 
     {
         public string Name { get; set; }
-        public EState EmotionalState { get; set; }
+        public EState EmotionalState
+        {
+            get { return ComprobationEmotionalState(); }
+        }
 
         public EPetTypes Pet { get; set; }
 
         public StatsPet Stats { get; set; } = new StatsPet(100,100,100);
-        /*
+   
         public Pets(string name, EState emotionalState, EPetTypes pet, StatsPet stats)
         {
             Name = name;
-            EmotionalState = emotionalState;
             Pet = pet;
             Stats = stats;
-           
-        }*/
-        public Pets(string name, EState emotionalState, EPetTypes pet)
-        {
-            Name = name;
-            EmotionalState = ComprobationEmotionalState();
-            Pet = pet;
+
         }
 
         public EState ComprobationEmotionalState()
         {
             if (Stats.HungryLevel <= 50)
             {
-                EmotionalState = EState.Angry;
+                return EState.Angry;
             }
             else if (Stats.EnergyLevel <= 30)
             {
-                EmotionalState = EState.Tired;
+                return EState.Tired;
             }
             else if (Stats.HealthLevel <= 20)
             {
-                EmotionalState = EState.Sick;
+                return EState.Sick;
             }
             else
             {
-                EmotionalState = EState.Normal;
+                return EState.Normal;
             }
-            return EmotionalState;
+
         }
     }
 }

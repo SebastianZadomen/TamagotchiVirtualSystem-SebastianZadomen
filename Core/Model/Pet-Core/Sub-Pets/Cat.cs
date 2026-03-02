@@ -11,7 +11,8 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
     public class Cat : Pets, IPetActionEat, IPetActionPlay, IPetActionSleep
     {
         private const int EnergyMax = 100; 
-        public Cat(string name, EState emotionalState = EState.Happy, /*StatsPet stats,*/ EPetTypes pet = EPetTypes.Cat) : base(name,emotionalState, pet/*,stats*/ ) { 
+        public Cat(string name) : base(name, EState.Normal, EPetTypes.Cat, new StatsPet(100, 100, 100))
+        { 
         }
 
         public void Eat()

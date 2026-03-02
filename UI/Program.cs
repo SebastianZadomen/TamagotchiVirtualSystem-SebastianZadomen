@@ -12,11 +12,16 @@ public class Program
         Console.WriteLine(naranjoso.Stats.EnergyLevel);
         naranjoso.Stats.EnergyLevel -= 10;
         Console.WriteLine(naranjoso.Stats.EnergyLevel);
+        Console.WriteLine(naranjoso.EmotionalState);
+        naranjoso.Stats.EnergyLevel -= 80;
+        Console.WriteLine(naranjoso.Stats.EnergyLevel);
+        Console.WriteLine(naranjoso.EmotionalState);
+
 
     }
 
-   
-   
+
+
 
 
 }
