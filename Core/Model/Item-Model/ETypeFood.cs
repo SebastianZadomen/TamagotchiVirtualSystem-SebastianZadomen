@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TamagotchiVirtualSystem.Core.Model.Item_Model
 {
-    public enum  ETipusFood
+    public enum  ETypeFood
     {
         Snack, 
         Meal

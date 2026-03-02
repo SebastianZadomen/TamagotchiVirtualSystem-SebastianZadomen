@@ -8,9 +8,19 @@ namespace TamagotchiVirtualSystem.Core.Model.Item_Model
 {
     public class Object : Item
     {
-
-        public Object(string name, char icon, EState modifierState, int upgradeValue) : base(name, icon, modifierState, upgradeValue)
+        public ETypeObject TypeObject { get; set; }
+        public Object(ETypeObject typeObject,string name, char icon, int upgradeValue ) : base(name, icon, RecalculateState(typeObject), upgradeValue)
         {
+            TypeObject = typeObject;
         }
-    }
+
+        public static EState RecalculateState(ETypeObject type)
+        {
+            if (type.Equals(ETypeObject.Toy)) return EState.Happy;
+            else
+                return EState.Normal;
+
+        }
+    }   
+    
 }
