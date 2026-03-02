@@ -9,11 +9,11 @@ namespace TamagotchiVirtualSystem.Core.Model.Item_Model
     public abstract class Item
     {
         public  string Name { get; set; }
-        public char Icon { get; set; }
+        public string Icon { get; set; }
         public EState ModifierState { get; set; }
         public int UpgradeValue { get; set; }
 
-        public Item(string name, char icon, EState modifierState, int upgradeValue) {
+        public Item(string name, string icon, EState modifierState, int upgradeValue) {
 
             Name = name;
             Icon = icon;
