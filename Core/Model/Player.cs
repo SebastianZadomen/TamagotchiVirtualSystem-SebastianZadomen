@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TamagotchiVirtualSystem.Model
 {
-    internal class Player
+    public  class Player
     {
     }
 }

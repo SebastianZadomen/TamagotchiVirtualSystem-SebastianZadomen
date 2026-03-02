@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TamagotchiVirtualSystem.Model
+namespace TamagotchiVirtualSystem.Core.Model
 {
-    internal class Pets
+    public enum EPetTypes
     {
+        Dog,
+        Cat,
+        Chick
     }
 }
