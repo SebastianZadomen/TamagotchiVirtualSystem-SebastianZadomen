@@ -8,9 +8,12 @@ namespace TamagotchiVirtualSystem.Core.Model.Item_Model
 {
     public class Food : Item
     {
+        public ETipusFood CategoryFood { get; set; }
          
-        public Food(string name, char icon, EState modifierState, int upgradeValue) : base(name, icon, modifierState, upgradeValue)
+        public Food(string name, char icon, EState modifierState, int upgradeValue, ETipusFood categoryFood) : base(name, icon, modifierState, upgradeValue)
         {
+            CategoryFood = categoryFood;
+
         }
     }
 }
