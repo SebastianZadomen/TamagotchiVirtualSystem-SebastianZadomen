@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TamagotchiVirtualSystem.Core.Interfaces;
+using TamagotchiVirtualSystem.Core.Model.Item_Model;
 using TamagotchiVirtualSystem.Model;
 
 namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
@@ -15,10 +16,35 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
         { 
         }
 
-        public void Eat()
+        public void Eat(Item aliment)
         {
-            Console.WriteLine($"Haz alimentado a {Name}");
-            Stats.HungryLevel += 20;
+            Consumed[CountFood] = aliment;
+            if (aliment.GetType() == typeof(Food))
+            {
+
+                Console.WriteLine($"{Name} esta comiendo {aliment.Name}");
+                Stats.HungryLevel += aliment.UpgradeValue;
+                if (aliment is Food food && food.CategoryFood == ETypeFood.Snack)
+                {
+                    SetManualState(EState.Happy);
+                }
+            }
+            else 
+            {
+                if (aliment is ObjectPet objectAliment)
+                {
+                    switch(objectAliment.TypeObject)
+                    {
+                        case ETypeObject.Medicine:
+                            Console.WriteLine($"{Name} se ha tomado {objectAliment.Name} ");
+                            Stats.HealthLevel += objectAliment.UpgradeValue;
+                            SetManualState(EState.Normal);
+                            break;
+                    }
+                }
+            }
+          
+
         }
 
         public void Play()

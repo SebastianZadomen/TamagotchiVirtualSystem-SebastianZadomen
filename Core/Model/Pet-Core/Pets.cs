@@ -4,16 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TamagotchiVirtualSystem.Core.Model;
+using TamagotchiVirtualSystem.Core.Model.Item_Model;
 
 namespace TamagotchiVirtualSystem.Model
 {
     public abstract class Pets 
     {
+        public static int CountFood = 0;
+        private EState? _emotionalState;
         public string Name { get; set; }
+       
+
         public EState EmotionalState
         {
-            get { return ComprobationEmotionalState(); }
+            get
+            {
+                if (_emotionalState is not null)
+                {
+                    EState temp = _emotionalState.Value;
+                    _emotionalState = null;
+                    return temp;
+                }
+                return ComprobationEmotionalState();
+            }
+            
         }
+        public Item[] Consumed { get; set; } = new Item[5];
 
         public EPetTypes Pet { get; set; }
 
@@ -47,5 +63,10 @@ namespace TamagotchiVirtualSystem.Model
             }
 
         }
+        public void SetManualState(EState state)
+        {
+            _emotionalState = state;
+        }
+
     }
 }

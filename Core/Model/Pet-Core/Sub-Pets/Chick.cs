@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TamagotchiVirtualSystem.Core.Interfaces;
+using TamagotchiVirtualSystem.Core.Model.Item_Model;
 using TamagotchiVirtualSystem.Model;
 
 namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
@@ -17,7 +18,7 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
         {
         }
 
-        public void Eat()
+        public void Eat(Item aliment)
         {
             Console.WriteLine($"Haz alimentado a {Name}");
             Stats.HungryLevel += 20;
