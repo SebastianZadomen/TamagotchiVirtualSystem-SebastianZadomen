@@ -101,23 +101,24 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
             if (Stats.EnergyLevel == EnergyMax)
             {
                 Console.WriteLine($"{Name} ya tiene la energia al maximo y no quiere dormir.");
-                return;
+
             }
 
-            if (EmotionalState == EState.Sick)
+            else if (EmotionalState == EState.Sick)
             {
                 Console.WriteLine($"{Name} esta enfermo y no puede descansar bien 🤒");
-                return;
+
             }
+            else
+            {
+                Console.WriteLine($"{Name} esta durmiendo... Zzzzzz");
 
-            Console.WriteLine($"{Name} esta durmiendo... Zzzzzz");
+                Stats.EnergyLevel += 50;
 
-            Stats.EnergyLevel += 50;
 
-            if (Stats.EnergyLevel > EnergyMax)
-                Stats.EnergyLevel = EnergyMax;
 
-            SetManualState(EState.Normal);
+                SetManualState(EState.Normal);
+            }
         }
     }
 }
