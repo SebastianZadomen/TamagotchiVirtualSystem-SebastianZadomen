@@ -15,7 +15,7 @@ public class Program
         naranjoso.Stats.EnergyLevel -= 10;
         Console.WriteLine(naranjoso.Stats.EnergyLevel);
         Console.WriteLine(naranjoso.EmotionalState);
-        naranjoso.Stats.EnergyLevel -= 80;
+        //naranjoso.Stats.EnergyLevel -= 80;
         Console.WriteLine(naranjoso.Stats.EnergyLevel);
         Console.WriteLine(naranjoso.EmotionalState);
 
@@ -24,10 +24,9 @@ public class Program
 
         Console.WriteLine(medicina.ModifierState);
         Console.WriteLine(carne.ModifierState);
+
+        naranjoso.Eat(carne);
+        Console.WriteLine(naranjoso.EmotionalState);
     }
-
-
-
-
 
 }
