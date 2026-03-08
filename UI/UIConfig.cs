@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TamagotchiVirtualSystem.Model;
 
 namespace TamagotchiVirtualSystem.UI
 {
@@ -10,32 +11,32 @@ namespace TamagotchiVirtualSystem.UI
     {
         public static class DesingCat
         {
-            public static void Draw()
+            public static void Draw(Pets pet)
             {
-
                 Console.OutputEncoding = System.Text.Encoding.UTF8;
-
                 Console.Clear();
 
                 Console.WriteLine("╔════════════════════════════════╗");
                 Console.WriteLine("║          TAMAGOTCHI            ║");
                 Console.WriteLine($"║    DateOfBirth: {new DateTime(1987, 01, 15):dd/MM/yyyy}     ║");
-                Console.WriteLine($"║\t   Type: Cat             ║");
+                Console.WriteLine($"║       Type: {pet.Pet}           ║");
                 Console.WriteLine("╚════════════════════════════════╝");
 
-                Console.WriteLine(GetPetArt("Happy"));
+                Console.WriteLine(GetPetArt(pet.EmotionalState.ToString()));
 
-                Console.WriteLine("Name: Mametchi ");
-                Console.WriteLine("Emotional State: Happy 😊 \n");
+                Console.WriteLine($"Name: {pet.Name}");
+                Console.WriteLine($"Emotional State: {pet.EmotionalState} \n");
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine($"Hunger:{DrawBar(20)}");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"Energy:{DrawBar(80)}");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Health:{DrawBar(60)}");
-                Console.ResetColor();
+                Console.WriteLine($"Hunger: {DrawBar(pet.Stats.HungryLevel)}");
 
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"Energy: {DrawBar(pet.Stats.EnergyLevel)}");
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Health: {DrawBar(pet.Stats.HealthLevel)}");
+
+                Console.ResetColor();
 
                 Console.WriteLine("\n---------------------------------");
                 Console.WriteLine("1 - Eat");
@@ -46,14 +47,16 @@ namespace TamagotchiVirtualSystem.UI
             private static string DrawBar(int value)
             {
                 int totalBlocks = 20;
-                int filledBlocks = value * totalBlocks / 100;
+                int clampedValue = Math.Clamp(value, 0, 100);
+
+                int filledBlocks = clampedValue * totalBlocks / 100;
 
                 return "[" +
                        new string('#', filledBlocks) +
                        new string('-', totalBlocks - filledBlocks) +
-                       $"] {value}%";
+                       $"] {clampedValue}%";
             }
-            /*Must be adapt to Enum list*/
+
             public static string GetPetArt(string state)
             {
                 return state switch

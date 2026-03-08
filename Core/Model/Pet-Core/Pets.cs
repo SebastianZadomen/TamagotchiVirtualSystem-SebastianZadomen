@@ -13,7 +13,8 @@ namespace TamagotchiVirtualSystem.Model
         public int CountFood = 0;
         private EState? _emotionalState;
         public string Name { get; set; }
-       
+        public DateTime LastUpdate { get; set; }
+
 
         public EState EmotionalState
         {
@@ -40,6 +41,7 @@ namespace TamagotchiVirtualSystem.Model
             Name = name;
             Pet = pet;
             Stats = stats;
+            LastUpdate = DateTime.Now;
 
         }
 
@@ -67,6 +69,19 @@ namespace TamagotchiVirtualSystem.Model
         {
             _emotionalState = state;
         }
+        public void UpdateStatsOverTime()
+        {
+            TimeSpan elapsed = DateTime.Now - LastUpdate;
 
+            int minutesPassed = (int)elapsed.TotalMinutes;
+
+            if (minutesPassed > 0)
+            {
+                Stats.EnergyLevel -= minutesPassed * 5;
+                Stats.HungryLevel -= minutesPassed * 5;
+
+                LastUpdate = DateTime.Now;
+            }
+        }
     }
 }

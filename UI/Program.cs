@@ -1,32 +1,63 @@
 ﻿using System.Collections;
 using System.Xml.Linq;
+using TamagotchiVirtualSystem.Core.Interfaces;
 using TamagotchiVirtualSystem.Core.Model;
-using TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets;
 using TamagotchiVirtualSystem.Core.Model.Item_Model;
+using TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets;
+using TamagotchiVirtualSystem.Model;
+using TamagotchiVirtualSystem.UI;
 
 
 public class Program
 {
-    public static void Main()
-    {
-        Cat naranjoso = new Cat("Gatito");
-        
-        Console.WriteLine(naranjoso.Stats.EnergyLevel);
-        naranjoso.Stats.EnergyLevel -= 10;
-        Console.WriteLine(naranjoso.Stats.EnergyLevel);
-        Console.WriteLine(naranjoso.EmotionalState);
-        //naranjoso.Stats.EnergyLevel -= 80;
-        Console.WriteLine(naranjoso.Stats.EnergyLevel);
-        Console.WriteLine(naranjoso.EmotionalState);
+        public static void Main()
+        {
+            Player player = new Player();
 
-        Food carne = new Food("carne", "f",50 ,ETypeFood.Snack);
-        ObjectPet medicina = new ObjectPet("pastilla", "💊", ETypeObject.Toy, 40);
+            player.Pet = new Cat("Gatito");
 
-        Console.WriteLine(medicina.ModifierState);
-        Console.WriteLine(carne.ModifierState);
+            bool running = true;
 
-        naranjoso.Eat(carne);
-        Console.WriteLine(naranjoso.EmotionalState);
+            while (running)
+            {
+                UIConfig.DesingCat.Draw(player.Pet);
+
+                string option = Console.ReadLine();
+
+                switch (option)
+                {
+                    case "1":
+
+                        Food comida = new Food("Snack", "🍪", 20, ETypeFood.Snack);
+
+                        if (player.Pet is IPetActionEat eatPet)
+                            eatPet.Eat(comida);
+
+                        break;
+
+                    case "2":
+
+                        if (player.Pet is IPetActionSleep sleepPet)
+                            sleepPet.Sleep();
+
+                        break;
+
+                    case "3":
+
+                        ObjectPet toy = new ObjectPet("Pelota", "⚽", ETypeObject.Toy, 10);
+
+                        if (player.Pet is IPetActionPlay playPet)
+                            playPet.Play(toy);
+
+                        break;
+
+                    case "4":
+
+                        running = false;
+
+                        break;
+                }
+            }
+        }
+
     }
-
-}
