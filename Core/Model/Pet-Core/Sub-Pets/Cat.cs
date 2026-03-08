@@ -19,32 +19,51 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
         public void Eat(Item aliment)
         {
             Consumed[CountFood] = aliment;
-            if (aliment.GetType() == typeof(Food))
-            {
 
-                Console.WriteLine($"{Name} esta comiendo {aliment.Name}");
-                Stats.HungryLevel += aliment.UpgradeValue;
-                if (aliment is Food food && food.CategoryFood == ETypeFood.Snack)
-                {
-                    SetManualState(EState.Happy);
-                }
-            }
-            else 
+            
+            CountFood++;
+            if (CountFood >= Consumed.Length)
             {
-                if (aliment is ObjectPet objectAliment)
+                CountFood = 0;
+            }
+
+            if (aliment is Food food)
+            {
+                Console.WriteLine($"{Name} esta comiendo {food.Name}");
+
+                Stats.HungryLevel += food.UpgradeValue;
+
+                if (food.CategoryFood == ETypeFood.Snack)
                 {
-                    switch(objectAliment.TypeObject)
+                    int snackCount = 0;
+
+                    foreach (var item in Consumed)
                     {
-                        case ETypeObject.Medicine:
-                            Console.WriteLine($"{Name} se ha tomado {objectAliment.Name} ");
-                            Stats.HealthLevel += objectAliment.UpgradeValue;
-                            SetManualState(EState.Normal);
-                            break;
+                        if (item is Food f && f.CategoryFood == ETypeFood.Snack)
+                        {
+                            snackCount++;
+                        }
+                    }
+
+                    if (snackCount >= 3)
+                    {
+                        Console.WriteLine($"{Name} ha comido demasiados snacks y se ha enfermado 🤒");
+                        SetManualState(EState.Sick);
+                    }
+                    else
+                    {
+                        SetManualState(EState.Happy);
                     }
                 }
             }
-          
+            else if (aliment is ObjectPet objectItem && objectItem.TypeObject == ETypeObject.Medicine)
+            {
+                Console.WriteLine($"{Name} ha tomado {objectItem.Name}");
 
+                Stats.HealthLevel += objectItem.UpgradeValue;
+
+                SetManualState(EState.Normal);
+            }
         }
 
         public void Play()

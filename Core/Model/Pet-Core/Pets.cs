@@ -10,7 +10,7 @@ namespace TamagotchiVirtualSystem.Model
 {
     public abstract class Pets 
     {
-        public static int CountFood = 0;
+        public int CountFood = 0;
         private EState? _emotionalState;
         public string Name { get; set; }
        
