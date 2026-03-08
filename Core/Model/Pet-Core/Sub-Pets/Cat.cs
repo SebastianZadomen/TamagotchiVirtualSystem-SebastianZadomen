@@ -68,27 +68,54 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
 
         public void Play(ObjectPet toy)
         {
-            if (toy.TypeObject != ETypeObject.Toy)
+            if (EmotionalState == EState.Tired)
+            {
+                Console.WriteLine($"{Name} esta muy cansado para jugar 😴");
+
+            }
+            else if (EmotionalState == EState.Sick)
+            {
+                Console.WriteLine($"{Name} esta enfermo y necesita medicina 🤒");
+
+            }
+            else if (toy.TypeObject != ETypeObject.Toy)
             {
                 Console.WriteLine($"{toy.Name} no es un juguete");
-                return;
+
             }
+            else
+            {
+                Console.WriteLine($"{Name} esta jugando con {toy.Name}");
 
-            Console.WriteLine($"{Name} esta jugando con {toy.Name}");
+                Stats.EnergyLevel -= toy.UpgradeValue;
+                Stats.HungryLevel -= 10;
 
-            Stats.EnergyLevel -= toy.UpgradeValue;
-            Stats.HungryLevel -= 10;
-
-            SetManualState(EState.Happy);
+                SetManualState(EState.Happy);
+            }
         }
 
         public void Sleep()
         {
             if (Stats.EnergyLevel == EnergyMax)
-                Console.WriteLine($"La energia de {Name} esta al maximo, no puede dormir");
-            else
-                Console.WriteLine($"{Name} esta descansando");
+            {
+                Console.WriteLine($"{Name} ya tiene la energia al maximo y no quiere dormir.");
+                return;
+            }
+
+            if (EmotionalState == EState.Sick)
+            {
+                Console.WriteLine($"{Name} esta enfermo y no puede descansar bien 🤒");
+                return;
+            }
+
+            Console.WriteLine($"{Name} esta durmiendo... Zzzzzz");
+
             Stats.EnergyLevel += 50;
+
+            if (Stats.EnergyLevel > EnergyMax)
+                Stats.EnergyLevel = EnergyMax;
+
+            SetManualState(EState.Normal);
         }
     }
 }
