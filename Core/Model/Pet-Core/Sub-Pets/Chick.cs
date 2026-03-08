@@ -14,7 +14,7 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
     {
         private const int EnergyMax = 100;
 
-        public Chick(string name) : base(name, EState.Normal, EPetTypes.Cat, new StatsPet(100, 100, 100))
+        public Chick(string name) : base(name, EState.Normal, EPetTypes.Chick, new StatsPet(100, 100, 100))
         {
         }
 
@@ -54,6 +54,7 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
                     }
                     else
                     {
+
                         SetManualState(EState.Happy);
                     }
                 }
@@ -68,31 +69,42 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
             }
         }
 
-        public void Play(ObjectPet toy)
+        public void Play(Item toy)
         {
-            if (EmotionalState == EState.Tired)
+            if (toy is ObjectPet objectToy)
             {
-                Console.WriteLine($"{Name} esta muy cansado para jugar 😴");
+                if (EmotionalState == EState.Tired)
+                {
+                    Console.WriteLine($"{Name} está muy cansado para jugar 😴");
+                }
+                else if (EmotionalState == EState.Sick)
+                {
+                    Console.WriteLine($"{Name} está enfermo y necesita medicina 🤒");
+                }
+                else if (objectToy.TypeObject == ETypeObject.Toy)
+                {
+                    Console.WriteLine($"{Name} está jugando con {objectToy.Name}");
 
-            }
-            else if (EmotionalState == EState.Sick)
-            {
-                Console.WriteLine($"{Name} esta enfermo y necesita medicina 🤒");
+                    Stats.EnergyLevel -= objectToy.UpgradeValue;
+                    Stats.HungryLevel -= 10;
 
-            }
-            else if (toy.TypeObject != ETypeObject.Toy)
-            {
-                Console.WriteLine($"{toy.Name} no es un juguete");
-
+                    if (Stats.EnergyLevel <= 30)
+                    {
+                        SetManualState(EState.Tired);
+                    }
+                    else
+                    {
+                        SetManualState(EState.Happy);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{objectToy.Name} no es un juguete");
+                }
             }
             else
             {
-                Console.WriteLine($"{Name} esta jugando con {toy.Name}");
-
-                Stats.EnergyLevel -= toy.UpgradeValue;
-                Stats.HungryLevel -= 10;
-
-                SetManualState(EState.Happy);
+                Console.WriteLine("Este objeto no puede usarse para jugar");
             }
         }
 

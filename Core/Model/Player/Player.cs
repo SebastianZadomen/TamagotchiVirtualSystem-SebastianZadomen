@@ -49,56 +49,138 @@ namespace TamagotchiVirtualSystem.Model
 
         public void RemoveItem()
         {
-            ShowInventory();
-
-            Console.WriteLine("\nSelecciona el item a eliminar:");
-
-            int index = int.Parse(Console.ReadLine());
-
-            if (index < 0 || index >= count)
+            bool flag = true;
+            do
             {
-                Console.WriteLine("Item invalido");
-            }
-            else
-            { 
-                Console.WriteLine($"{inventory[index].Name} eliminado");
+                try
+                {
+                    ShowInventory();
 
-            for (int i = index; i < count - 1; i++)
-            {
-                inventory[i] = inventory[i + 1];
-            }
+                    Console.WriteLine("\nSelecciona el item a eliminar:");
 
-            inventory[count - 1] = null;
-            count--;
-             }
+                    int index = 0;
+
+                    flag = int.TryParse(Console.ReadLine(), out index);
+
+                    if (index < 0 || index >= count)
+                    {
+                        Console.WriteLine("Item invalido");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{inventory[index].Name} eliminado");
+
+                        for (int i = index; i < count - 1; i++)
+                        {
+                            inventory[i] = inventory[i + 1];
+                        }
+
+                        inventory[count - 1] = null;
+                        count--;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: Numero introducido incorrecto");
+
+                }
+            } while (flag);
         }
-
-        public void UseItem()
+        public void UseItem(bool isForPlay)
         {
-            ShowInventory();
+           
+            if (count == 0)
+            {
+                Console.WriteLine("Inventario vacío");
+                Console.ReadKey();
+                return;
+            }
 
+            ShowInventory();
             Console.WriteLine("\nSelecciona el item a usar:");
 
-            int index = int.Parse(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine(), out int index))
+            {
+                Console.WriteLine("Número inválido");
+                return;
+            }
 
             if (index < 0 || index >= count)
             {
-                Console.WriteLine("Item invalido");
+                Console.WriteLine("Índice inválido");
+                return;
+            }
+
+            Item selectedItem = inventory[index];
+
+            if (isForPlay)
+            {
+                
+                if (selectedItem is ObjectPet toy && toy.TypeObject == ETypeObject.Toy)
+                {
+                    if (Pet is IPetActionPlay playPet)
+                    {
+                        playPet.Play(toy);
+                    }
+                   
+                }
+                else
+                {
+                    Console.WriteLine($"{selectedItem.Name} no es un juguete válido para jugar");
+                }
             }
             else
             {
-                Item item = inventory[index];
-
-                if (item is Food || (item is ObjectPet obj && obj.TypeObject == ETypeObject.Medicine))
+               
+                if (selectedItem is Food || (selectedItem is ObjectPet obj && obj.TypeObject == ETypeObject.Medicine))
                 {
                     if (Pet is IPetActionEat eatPet)
                     {
-                        eatPet.Eat(item);
+                        eatPet.Eat(selectedItem);
                     }
+                    RemoveItemUnpainted(index); 
                 }
+                else
+                {
+                    Console.WriteLine($"{selectedItem.Name} no puede comerse");
+                }
+            }
+        }
+        public Item SelectItem()
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Inventario vacío");
+                Console.ReadKey();
+                return null;
+            }
 
+            ShowInventory();
+
+            Console.WriteLine("\nSelecciona el item:");
+
+            if (!int.TryParse(Console.ReadLine(), out int index))
+            {
+                Console.WriteLine("Número inválido");
+                Console.ReadKey();
+                return null;
+            }
+
+            if (index < 0 || index >= count)
+            {
+                Console.WriteLine("Índice inválido");
+                Console.ReadKey();
+                return null;
+            }
+
+            Item selectedItem = inventory[index];
+
+            if (selectedItem is Food || (selectedItem is ObjectPet obj && obj.TypeObject == ETypeObject.Medicine))
+            {
                 RemoveItemUnpainted(index);
             }
+
+            return selectedItem;
         }
         private void RemoveItemUnpainted(int index)
         {

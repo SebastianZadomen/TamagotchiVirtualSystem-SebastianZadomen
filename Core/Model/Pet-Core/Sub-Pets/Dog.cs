@@ -13,27 +13,27 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
    {
         private const int EnergyMax = 100;
 
-        public Dog(string name) : base(name, EState.Normal, EPetTypes.Cat, new StatsPet(100, 100, 100))
+        public Dog(string name) : base(name, EState.Normal, EPetTypes.Dog, new StatsPet(100, 100, 100))
         {
         }
 
         public void Eat(Item aliment)
         {
-            Consumed[CountFood] = aliment;
-
-
-            CountFood++;
-            if (CountFood >= Consumed.Length)
-            {
-                CountFood = 0;
-            }
+          
 
             if (aliment is Food food)
             {
                 Console.WriteLine($"{Name} esta comiendo {food.Name}");
 
                 Stats.HungryLevel += food.UpgradeValue;
+                Consumed[CountFood] = aliment;
 
+
+                CountFood++;
+                if (CountFood >= Consumed.Length)
+                {
+                    CountFood = 0;
+                }
                 if (food.CategoryFood == ETypeFood.Snack)
                 {
                     int snackCount = 0;
@@ -53,6 +53,7 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
                     }
                     else
                     {
+
                         SetManualState(EState.Happy);
                     }
                 }
@@ -67,33 +68,45 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
             }
         }
 
-        public void Play(ObjectPet toy)
+        public void Play(Item toy)
         {
-            if (EmotionalState == EState.Tired)
+            if (toy is ObjectPet objectToy)
             {
-                Console.WriteLine($"{Name} esta muy cansado para jugar 😴");
-                
-            }
-            else if(EmotionalState == EState.Sick)
-            {
-                Console.WriteLine($"{Name} esta enfermo y necesita medicina 🤒");
-                
-            }
-            else if (toy.TypeObject != ETypeObject.Toy)
-            {
-                Console.WriteLine($"{toy.Name} no es un juguete");
+                if (EmotionalState == EState.Tired)
+                {
+                    Console.WriteLine($"{Name} está muy cansado para jugar 😴");
+                }
+                else if (EmotionalState == EState.Sick)
+                {
+                    Console.WriteLine($"{Name} está enfermo y necesita medicina 🤒");
+                }
+                else if (objectToy.TypeObject == ETypeObject.Toy)
+                {
+                    Console.WriteLine($"{Name} está jugando con {objectToy.Name}");
 
+                    Stats.EnergyLevel -= objectToy.UpgradeValue;
+                    Stats.HungryLevel -= 10;
+
+                    if (Stats.EnergyLevel <= 30)
+                    {
+                        SetManualState(EState.Tired);
+                    }
+                    else
+                    {
+                        SetManualState(EState.Happy);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{objectToy.Name} no es un juguete");
+                }
             }
             else
             {
-                Console.WriteLine($"{Name} esta jugando con {toy.Name}");
-
-                Stats.EnergyLevel -= toy.UpgradeValue;
-                Stats.HungryLevel -= 10;
-
-                SetManualState(EState.Happy);
+                Console.WriteLine("Este objeto no puede usarse para jugar");
             }
         }
+
 
         public void Sleep()
         {
