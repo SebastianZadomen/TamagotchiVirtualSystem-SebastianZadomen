@@ -5,6 +5,7 @@ using TamagotchiVirtualSystem.Core.Interfaces;
 using TamagotchiVirtualSystem.Core.Model;
 using TamagotchiVirtualSystem.Core.Model.Item_Model;
 using TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets;
+using TamagotchiVirtualSystem.Core.Model.Player;
 using TamagotchiVirtualSystem.Model;
 using TamagotchiVirtualSystem.UI;
 
@@ -16,7 +17,8 @@ public class Program
     private const string OptionSleep = "2";
     private const string OptionPlay = "3";
     private const string OptionInventory = "4";
-    private const string OptionExit = "5";
+    private const string OptionShop = "5";
+    private const string OptionExit = "6";
     private const string OptionCat = "1";
     private const string OptionChick = "2";
     private const string OptionDog = "3";
@@ -72,6 +74,7 @@ public class Program
 
         while (running)
         {
+            Console.Clear();
             player.Pet.UpdateStatsOverTime();
 
             if (player.Pet.IsDead)
@@ -81,6 +84,7 @@ public class Program
             }
             else
             {
+
                 UIConfig.DesingCat.Draw(player.Pet);
 
                 string option = Console.ReadLine();
@@ -102,6 +106,11 @@ public class Program
 
                     case OptionInventory:
                         player.ShowInventory();
+                        Console.ReadKey();
+                        break;
+
+                    case OptionShop:
+                        ShopMenu(player);
                         break;
 
                     case OptionExit:
@@ -110,31 +119,88 @@ public class Program
                 }
             }
         }
+        StartGame();
+        Console.ReadKey();
     }
 
-   
-    static void EatMenu(Player player)
+
+    public static void EatMenu(Player player)
     {
         Console.Clear();
+        Item item = player.SelectItem();
 
-        player.UseItem();
+        if (item == null) return;
+
+        // Comprobamos que sea comida o medicina
+        if (item is Food || (item is ObjectPet obj && obj.TypeObject == ETypeObject.Medicine))
+        {
+            if (player.Pet is IPetActionEat eatPet)
+            {
+                eatPet.Eat(item);
+            }
+
+            Console.WriteLine($"{item.Name} dado a {player.Pet.Name}");
+        }
+        else
+        {
+            Console.WriteLine($"{item.Name} no se le puede dar de comer a {player.Pet.Name}");
+        }
+
+        Console.ReadKey();
     }
 
-    static void PlayMenu(Player player)
+    public static void PlayMenu(Player player)
     {
         Console.Clear();
+        Item item = player.SelectItem();
 
-        ObjectPet toy = new ObjectPet("Pelota", "⚽", ETypeObject.Toy, 15);
+        if (item == null) return;
 
-        if (player.Pet is IPetActionPlay playPet)
-            playPet.Play(toy);
+       
+        if (item is ObjectPet obj && obj.TypeObject == ETypeObject.Toy)
+        {
+            if (player.Pet is IPetActionPlay playPet)
+            {
+                playPet.Play(item);
+            }
+
+            Console.WriteLine($"{item.Name} usado para jugar con {player.Pet.Name}");
+        }
+        else
+        {
+            Console.WriteLine($"{item.Name} no se puede usar para jugar con {player.Pet.Name}");
+        }
+
+        Console.ReadKey();
     }
 
-    static void RestartGame()
+    public static void RestartGame()
     {
-        Console.WriteLine("\nEl juego se reiniciará...");
-        System.Threading.Thread.Sleep(2000);
+        Console.WriteLine("\nLa mascota ha muerto.");
+        Console.WriteLine("Presiona una tecla para reiniciar...");
+        Console.ReadKey();
+
         Console.Clear();
         StartGame();
+    }
+    public static void ShopMenu(Player player)
+    {
+        Shop shop = new Shop();
+
+        Console.Clear();
+        shop.ShowItems();
+
+        Console.WriteLine("Selecciona item para comprar:");
+        int index = int.Parse(Console.ReadLine());
+
+        Item item = shop.BuyItem(index);
+
+        if (item != null)
+        {
+            player.AddItem(item);
+        }
+
+        Console.WriteLine("Pulsa una tecla para volver...");
+        Console.ReadKey();
     }
 }

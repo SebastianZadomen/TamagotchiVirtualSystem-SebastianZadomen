@@ -86,46 +86,101 @@ namespace TamagotchiVirtualSystem.Model
                 }
             } while (flag);
         }
-
-        public void UseItem()
+        public void UseItem(bool isForPlay)
         {
-            bool flag = true;
-            do
+           
+            if (count == 0)
             {
-                try
+                Console.WriteLine("Inventario vacío");
+                Console.ReadKey();
+                return;
+            }
+
+            ShowInventory();
+            Console.WriteLine("\nSelecciona el item a usar:");
+
+            if (!int.TryParse(Console.ReadLine(), out int index))
+            {
+                Console.WriteLine("Número inválido");
+                return;
+            }
+
+            if (index < 0 || index >= count)
+            {
+                Console.WriteLine("Índice inválido");
+                return;
+            }
+
+            Item selectedItem = inventory[index];
+
+            if (isForPlay)
+            {
+                
+                if (selectedItem is ObjectPet toy && toy.TypeObject == ETypeObject.Toy)
                 {
-                    ShowInventory();
-
-                    Console.WriteLine("\nSelecciona el item a usar:");
-
-                    int index = 0;
-
-                    flag = int.TryParse(Console.ReadLine(), out index);
-                    if (index < 0 || index >= count)
+                    if (Pet is IPetActionPlay playPet)
                     {
-                        Console.WriteLine("Item invalido");
+                        playPet.Play(toy);
                     }
-                    else
-                    {
-                        Item item = inventory[index];
-
-                        if (item is Food || (item is ObjectPet obj && obj.TypeObject == ETypeObject.Medicine))
-                        {
-                            if (Pet is IPetActionEat eatPet)
-                            {
-                                eatPet.Eat(item);
-                            }
-                        }
-
-                        RemoveItemUnpainted(index);
-                    }
+                   
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine($"Error: Numero introducido incorrecto");
-
+                    Console.WriteLine($"{selectedItem.Name} no es un juguete válido para jugar");
                 }
-            } while (flag);
+            }
+            else
+            {
+               
+                if (selectedItem is Food || (selectedItem is ObjectPet obj && obj.TypeObject == ETypeObject.Medicine))
+                {
+                    if (Pet is IPetActionEat eatPet)
+                    {
+                        eatPet.Eat(selectedItem);
+                    }
+                    RemoveItemUnpainted(index); 
+                }
+                else
+                {
+                    Console.WriteLine($"{selectedItem.Name} no puede comerse");
+                }
+            }
+        }
+        public Item SelectItem()
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Inventario vacío");
+                Console.ReadKey();
+                return null;
+            }
+
+            ShowInventory();
+
+            Console.WriteLine("\nSelecciona el item:");
+
+            if (!int.TryParse(Console.ReadLine(), out int index))
+            {
+                Console.WriteLine("Número inválido");
+                Console.ReadKey();
+                return null;
+            }
+
+            if (index < 0 || index >= count)
+            {
+                Console.WriteLine("Índice inválido");
+                Console.ReadKey();
+                return null;
+            }
+
+            Item selectedItem = inventory[index];
+
+            if (selectedItem is Food || (selectedItem is ObjectPet obj && obj.TypeObject == ETypeObject.Medicine))
+            {
+                RemoveItemUnpainted(index);
+            }
+
+            return selectedItem;
         }
         private void RemoveItemUnpainted(int index)
         {

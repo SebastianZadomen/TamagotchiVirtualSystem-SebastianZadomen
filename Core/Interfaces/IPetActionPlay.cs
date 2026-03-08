@@ -11,6 +11,6 @@ namespace TamagotchiVirtualSystem.Core.Interfaces
 {
     public interface IPetActionPlay
     {
-        void Play(ObjectPet toy);
+        void Play(Item toy);
     }
 }

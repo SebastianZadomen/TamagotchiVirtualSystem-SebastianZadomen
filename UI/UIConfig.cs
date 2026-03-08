@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TamagotchiVirtualSystem.Model;
+using TamagotchiVirtualSystem.Core.Model;
 
 namespace TamagotchiVirtualSystem.UI
 {
@@ -14,7 +15,8 @@ namespace TamagotchiVirtualSystem.UI
             public static void Draw(Pets pet)
             {
                 Console.OutputEncoding = System.Text.Encoding.UTF8;
-                Console.Clear();
+                
+
 
                 Console.WriteLine("╔════════════════════════════════╗");
                 Console.WriteLine("║          TAMAGOTCHI            ║");
@@ -22,7 +24,7 @@ namespace TamagotchiVirtualSystem.UI
                 Console.WriteLine($"║       Type: {pet.Pet}           ║");
                 Console.WriteLine("╚════════════════════════════════╝");
 
-                Console.WriteLine(GetPetArt(pet.EmotionalState.ToString()));
+                Console.WriteLine(GetPetArt(pet));
 
                 Console.WriteLine($"Name: {pet.Name}");
                 Console.WriteLine($"Emotional State: {pet.EmotionalState} \n");
@@ -42,7 +44,10 @@ namespace TamagotchiVirtualSystem.UI
                 Console.WriteLine("1 - Eat");
                 Console.WriteLine("2 - Sleep");
                 Console.WriteLine("3 - Play");
-                Console.WriteLine("4 - Exit");
+                Console.WriteLine("4 - Inventory");
+                Console.WriteLine("5 - Shop");
+                Console.WriteLine("6 - Exit");
+                Console.WriteLine("DEBUG: " + pet.Pet);
             }
             public static void MenuSelectionPet()
             {
@@ -62,52 +67,163 @@ namespace TamagotchiVirtualSystem.UI
                        new string('-', totalBlocks - filledBlocks) +
                        $"] {clampedValue}%";
             }
-
-            public static string GetPetArt(string state)
+            public static string GetPetArt(Pets pet)
+            {
+                return pet.Pet switch
+                {
+                    EPetTypes.Cat => GetCatArt(pet.EmotionalState),
+                    EPetTypes.Chick => GetChickArt(pet.EmotionalState),
+                    EPetTypes.Dog => GetDogArt(pet.EmotionalState),
+                    _ => ""
+                };
+            }
+            private static string GetCatArt(EState state)
             {
                 return state switch
                 {
-                    "Happy" => @"
-      /\_/\      
-     ( ^‿^ )     
-     /       \    
-    |         |   
-     \__/\___/    
+                    EState.Happy => @"
+      /\_/\  
+     ( ^‿^ )
+     /      \
+    |        |
+     \__/\___/
 ",
 
-                    "Sad" => @"
-      /\_/\      
-     ( ╥﹏╥ )     
-     /       \    
-    |         |   
-     \__/\___/    
+                    EState.Sad => @"
+      /\_/\  
+     ( ╥﹏╥ )
+     /      \
+    |        |
+     \__/\___/
 ",
 
-                    "Angry" => @"
-      /\_/\      
-     ( ಠ_ಠ )     
-     /       \    
-    |         |   
-     \__/\___/    
+                    EState.Angry => @"
+      /\_/\  
+     ( ಠ_ಠ )
+     /      \
+    |        |
+     \__/\___/
 ",
 
-                    "Tired" => @"
-      /\_/\      
-     ( -_- ) zZ  
-     /       \    
-    |         |   
-     \__/\___/    
+                    EState.Tired => @"
+      /\_/\  
+     ( -_- ) zZ
+     /      \
+    |        |
+     \__/\___/
 ",
 
-                    "Sick" => @"
-      /\_/\      
-     ( x_x )     
-     /       \    
-    |  +--+   |   
-     \__/\___/    
+                    EState.Sick => @"
+      /\_/\  
+     ( x_x )
+     /  +--+ \
+    |        |
+     \__/\___/
 ",
 
-                    _ => ""
+                    _ => @"
+      /\_/\  
+     (o_o )
+     /      \
+    |        |
+     \__/\___/
+"
+                };
+            }
+            private static string GetDogArt(EState state)
+            {
+                return state switch
+                {
+                    EState.Happy => @"
+        /^-----^\
+       V  ^   ^  V
+        \   Y   /  
+         \____/ 
+        /      \
+",
+
+                    EState.Sad => @"
+        /^-----^\
+       V  -   -  V
+        \   Y   /  
+         \____/ 
+        /      \
+",
+
+                    EState.Angry => @"
+        /^-----^\
+       V  ಠ   ಠ  V
+        \   Y   /  
+         \____/ 
+        /      \
+",
+
+                    EState.Tired => @"
+         /^-----^\
+       V  -   -  V ZzZZz
+        \   Y   /  
+         \____/ 
+        /      \
+",
+
+                    EState.Sick => @"
+        /^-----^\
+       V  x   x  V
+        \   Y  /  
+         \____/ 
+        /      \
+",
+
+                    _ => @"
+        /^-----^\
+       V  o   o  V
+        \   Y   /  
+         \____/ 
+        /      \
+"
+                };
+            }
+            private static string GetChickArt(EState state)
+            {
+                return state switch
+                {
+                    EState.Happy => @"
+          ( ^   ^ )
+           (  \/  )
+            /    \
+",
+
+                    EState.Sad => @"
+          ( -   - )
+           (  \/  )
+            /    \
+",
+
+                    EState.Angry => @"
+         ( ಠ   ಠ )
+          (  \/  )
+           /    \
+",
+
+                    EState.Tired => @"
+         ( -   - ) zZz
+          (  \/  )
+           /    \
+",
+
+                    EState.Sick => @"
+         ( X   X )
+          (  \/  )
+           /    \
+",
+
+                    _  => @"
+
+          ( o  o )
+          (  \/  )
+           /    \
+
+",
                 };
             }
         }

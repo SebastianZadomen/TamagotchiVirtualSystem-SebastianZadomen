@@ -49,22 +49,16 @@ namespace TamagotchiVirtualSystem.Model
 
         public EState ComprobationEmotionalState()
         {
-            if (Stats.HungryLevel <= 50)
-            {
-                return EState.Angry;
-            }
-            else if (Stats.EnergyLevel <= 30)
-            {
-                return EState.Tired;
-            }
-            else if (Stats.HealthLevel <= 20)
-            {
+            if (Stats.HealthLevel <= 20)
                 return EState.Sick;
-            }
+            else if (Stats.HungryLevel <= 30)
+                return EState.Sad;
+            else if (Stats.HungryLevel <= 50)
+                return EState.Angry;
+            else if (Stats.EnergyLevel <= 30)
+                return EState.Tired;
             else
-            {
-                return EState.Normal;
-            }
+                return EState.Happy;
 
         }
         public void SetManualState(EState state)
@@ -73,17 +67,19 @@ namespace TamagotchiVirtualSystem.Model
         }
         public void UpdateStatsOverTime()
         {
+            if (IsDead) return;
+
             TimeSpan elapsed = DateTime.Now - LastUpdate;
 
-            int minutesPassed = (int)elapsed.TotalMinutes;
+            if (elapsed.TotalSeconds < 10) return; 
 
-            if (minutesPassed > 0)
-            {
-                Stats.EnergyLevel -= minutesPassed * 5;
-                Stats.HungryLevel -= minutesPassed * 5;
+            int decay = (int)(elapsed.TotalSeconds / 10);
 
-                LastUpdate = DateTime.Now;
-            }
+            Stats.EnergyLevel -= decay * 2;
+            Stats.HungryLevel -= decay * 2;
+
+            LastUpdate = DateTime.Now;
+            CheckIfDead();
         }
         public void CheckIfDead()
         {
