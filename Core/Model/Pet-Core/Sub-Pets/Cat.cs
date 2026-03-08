@@ -66,11 +66,20 @@ namespace TamagotchiVirtualSystem.Core.Model.Pet_Core.Sub_Pets
             }
         }
 
-        public void Play()
+        public void Play(ObjectPet toy)
         {
-            Console.WriteLine($"{Name} esta jugando ");
-            Stats.EnergyLevel -= 20;
-            Stats.HungryLevel -= 30;
+            if (toy.TypeObject != ETypeObject.Toy)
+            {
+                Console.WriteLine($"{toy.Name} no es un juguete");
+                return;
+            }
+
+            Console.WriteLine($"{Name} esta jugando con {toy.Name}");
+
+            Stats.EnergyLevel -= toy.UpgradeValue;
+            Stats.HungryLevel -= 10;
+
+            SetManualState(EState.Happy);
         }
 
         public void Sleep()
