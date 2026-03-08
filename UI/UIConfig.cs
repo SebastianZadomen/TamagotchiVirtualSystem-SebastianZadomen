@@ -44,6 +44,12 @@ namespace TamagotchiVirtualSystem.UI
                 Console.WriteLine("3 - Play");
                 Console.WriteLine("4 - Exit");
             }
+            public static void MenuSelectionPet()
+            {
+                Console.Clear();
+                Console.WriteLine("=== SELECCIONA TU MASCOTA ===\n1 - Cat\n2 - Chick\n3 - Dog");
+               
+            }
             private static string DrawBar(int value)
             {
                 int totalBlocks = 20;

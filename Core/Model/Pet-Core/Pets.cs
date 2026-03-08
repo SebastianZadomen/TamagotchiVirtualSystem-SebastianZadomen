@@ -13,6 +13,8 @@ namespace TamagotchiVirtualSystem.Model
         public int CountFood = 0;
         private EState? _emotionalState;
         public string Name { get; set; }
+        public bool IsDead { get; private set; } = false;
+
         public DateTime LastUpdate { get; set; }
 
 
@@ -81,6 +83,17 @@ namespace TamagotchiVirtualSystem.Model
                 Stats.HungryLevel -= minutesPassed * 5;
 
                 LastUpdate = DateTime.Now;
+            }
+        }
+        public void CheckIfDead()
+        {
+            if (Stats.EnergyLevel <= 0 || Stats.HealthLevel <= 0)
+            {
+                IsDead = true;
+                Stats.EnergyLevel = 0;
+                Stats.HungryLevel = 0;
+                Stats.HealthLevel = 0;
+                Console.WriteLine($"\n{Name} ha muerto... el juego se reiniciará.");
             }
         }
     }

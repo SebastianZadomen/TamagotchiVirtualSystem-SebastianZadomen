@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Numerics;
 using System.Xml.Linq;
 using TamagotchiVirtualSystem.Core.Interfaces;
 using TamagotchiVirtualSystem.Core.Model;
@@ -10,15 +11,75 @@ using TamagotchiVirtualSystem.UI;
 
 public class Program
 {
-        public static void Main()
+//menu const
+    private const string OptionEat = "1";
+    private const string OptionSleep = "2";
+    private const string OptionPlay = "3";
+    private const string OptionInventory = "4";
+    private const string OptionExit = "5";
+    private const string OptionCat = "1";
+    private const string OptionChick = "2";
+    private const string OptionDog = "3";
+
+
+    public static void Main()
+    {
+        StartGame();
+    }
+
+    static void StartGame()
+    {
+        Player player = new Player();
+
+        player.Pet = SelectPet();
+        GameLoop(player);
+    }
+
+    static Pets SelectPet()
+    {
+        UIConfig.DesingCat.MenuSelectionPet();
+
+
+        string option = Console.ReadLine();
+
+        Console.Write("Introduce el nombre de tu mascota: ");
+        string name = Console.ReadLine();
+
+        switch (option)
         {
-            Player player = new Player();
+            case OptionCat:
+                 return new Cat(name);
+                break;
 
-            player.Pet = new Cat("Gatito");
+            case OptionChick:
+                return new Chick(name);
+                break;
+            case OptionDog:
+                return new Dog(name);
+                break;
+                
+            default:
+                Console.WriteLine("Opción no válida. Se creará un Cat por defecto.");
+                return new Cat(name);
+                break;
+        }
+    }
 
-            bool running = true;
+  
+    static void GameLoop(Player player)
+    {
+        bool running = true;
 
-            while (running)
+        while (running)
+        {
+            player.Pet.UpdateStatsOverTime();
+
+            if (player.Pet.IsDead)
+            {
+                RestartGame();
+
+            }
+            else
             {
                 UIConfig.DesingCat.Draw(player.Pet);
 
@@ -26,38 +87,54 @@ public class Program
 
                 switch (option)
                 {
-                    case "1":
-
-                        Food comida = new Food("Snack", "🍪", 20, ETypeFood.Snack);
-
-                        if (player.Pet is IPetActionEat eatPet)
-                            eatPet.Eat(comida);
-
+                    case OptionEat:
+                        EatMenu(player);
                         break;
 
-                    case "2":
-
+                    case OptionSleep:
                         if (player.Pet is IPetActionSleep sleepPet)
                             sleepPet.Sleep();
-
                         break;
 
-                    case "3":
-
-                        ObjectPet toy = new ObjectPet("Pelota", "⚽", ETypeObject.Toy, 10);
-
-                        if (player.Pet is IPetActionPlay playPet)
-                            playPet.Play(toy);
-
+                    case OptionPlay:
+                        PlayMenu(player);
                         break;
 
-                    case "4":
+                    case OptionInventory:
+                        player.ShowInventory();
+                        break;
 
+                    case OptionExit:
                         running = false;
-
                         break;
                 }
             }
         }
-
     }
+
+   
+    static void EatMenu(Player player)
+    {
+        Console.Clear();
+
+        player.UseItem();
+    }
+
+    static void PlayMenu(Player player)
+    {
+        Console.Clear();
+
+        ObjectPet toy = new ObjectPet("Pelota", "⚽", ETypeObject.Toy, 15);
+
+        if (player.Pet is IPetActionPlay playPet)
+            playPet.Play(toy);
+    }
+
+    static void RestartGame()
+    {
+        Console.WriteLine("\nEl juego se reiniciará...");
+        System.Threading.Thread.Sleep(2000);
+        Console.Clear();
+        StartGame();
+    }
+}
